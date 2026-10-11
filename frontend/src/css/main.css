@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f1f7f3;
+  --color-brand-100: #dcebe1;
+  --color-brand-500: #2f8a54;
+  --color-brand-600: #247043;
+  --color-brand-700: #1d5a37;
+  --color-brand-900: #123a24;
+
+  --color-ash-50: #f6f7f7;
+  --color-ash-100: #eceeee;
+  --color-ash-200: #d9dddd;
+  --color-ash-600: #5b6464;
+  --color-ash-900: #1c2222;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Visible keyboard focus everywhere (accessibility) */
+:focus-visible {
+  outline: 3px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
