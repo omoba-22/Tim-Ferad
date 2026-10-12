@@ -3,6 +3,8 @@ import helmet from 'helmet'
 import cors from 'cors'
 import { env } from './config/env.js'
 import { supabase } from './db/supabase.js'
+import { publicRouter } from './routes/public.js'
+import { adminRouter } from './routes/admin.js'
 
 export const app = express()
 
@@ -30,6 +32,8 @@ app.get('/api/health/db', async (req, res, next) => {
   }
 })
 
+app.use('/api', publicRouter)
+app.use('/api/admin', adminRouter)
 // Unknown routes
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' })
