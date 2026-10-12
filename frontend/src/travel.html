@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>{{> head title="Travel" description="Lagos to Ibadan and Ibadan to Lagos routes." }}</head>
+<body class="bg-ash-50 font-sans text-ash-900">
+  {{> header }}
+  <main id="main">
+    {{> page-banner title="Travel and destinations" intro="Scheduled trips between Lagos and Ibadan, in both directions." }}
+    <section class="section">
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="card"><h2 class="flex items-center gap-3 text-lg font-semibold">Lagos <i data-lucide="arrow-right" class="h-5 w-5 text-brand-700"></i> Ibadan</h2>
+          <p class="mt-2 text-ash-600">Departure park: [PLACEHOLDER]</p></div>
+        <div class="card"><h2 class="flex items-center gap-3 text-lg font-semibold">Ibadan <i data-lucide="arrow-right" class="h-5 w-5 text-brand-700"></i> Lagos</h2>
+          <p class="mt-2 text-ash-600">Departure park: [PLACEHOLDER]</p></div>
+      </div>
+
+      <div class="notice mt-8">
+        <i data-lucide="info" class="mt-0.5 h-5 w-5 shrink-0 text-brand-700"></i>
+        <p>Online trip search and booking are not live yet. Fares, departure times and departure parks are to be confirmed by {{siteName}}. To ask about a trip, contact us below.</p>
+      </div>
+
+      <div class="mt-6">{{> contact-actions message="Hello%20Tim-Ferad%2C%20I%20would%20like%20to%20ask%20about%20a%20trip." }}</div>
+    </section>
+  </main>
+  {{> footer }}
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>

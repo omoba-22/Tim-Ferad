@@ -1,8 +1,22 @@
 <footer class="mt-16 bg-ash-900 text-ash-100">
-  <div class="mx-auto max-w-6xl px-4 py-10 text-sm">
-    <p class="font-semibold">Tim-Ferad</p>
-    <p class="mt-2 text-ash-200">[PLACEHOLDER: office address]</p>
-    <p class="text-ash-200">[PLACEHOLDER: phone number] &middot; [PLACEHOLDER: email]</p>
-    <p class="mt-6 text-ash-200">&copy; Tim-Ferad. All rights reserved.</p>
+  <div class="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm md:grid-cols-3">
+    <div>
+      <p class="text-lg font-semibold">{{siteName}}</p>
+      <p class="mt-2 text-ash-200">{{address}}</p>
+    </div>
+    <div>
+      <p class="font-semibold">Contact</p>
+      <p class="mt-2"><a class="hover:underline" href="tel:{{phoneTel}}">{{phoneDisplay}}</a></p>
+      <p><a class="hover:underline" href="mailto:{{email}}">{{email}}</a></p>
+    </div>
+    <div>
+      <p class="font-semibold">Links</p>
+      <ul class="mt-2 space-y-1">
+        <li><a class="hover:underline" href="/faqs.html">FAQs</a></li>
+        <li><a class="hover:underline" href="/terms.html">Terms and Conditions</a></li>
+        <li><a class="hover:underline" href="/privacy.html">Privacy Policy</a></li>
+      </ul>
+    </div>
   </div>
+  <p class="border-t border-ash-600 px-4 py-4 text-center text-xs text-ash-200">&copy; {{siteName}}. All rights reserved.</p>
 </footer>

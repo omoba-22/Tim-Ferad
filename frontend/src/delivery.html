@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>{{> head title="Delivery services" description="Send a package with Tim-Ferad." }}</head>
+<body class="bg-ash-50 font-sans text-ash-900">
+  {{> header }}
+  <main id="main">
+    {{> page-banner title="Delivery services" intro="Tell us what you want to send and our team will review your request." }}
+    <section class="section">
+      <h2 class="text-2xl font-bold">How it works</h2>
+      <ol class="mt-6 grid gap-6 md:grid-cols-3">
+        <li class="card"><h3 class="font-semibold">1. Submit your request</h3><p class="mt-2 text-ash-600">Give us the sender, recipient, pickup and delivery details, and a description of the package.</p></li>
+        <li class="card"><h3 class="font-semibold">2. We review it</h3><p class="mt-2 text-ash-600">Your order starts as "Pending review" until the company confirms it.</p></li>
+        <li class="card"><h3 class="font-semibold">3. We confirm with you</h3><p class="mt-2 text-ash-600">The company confirms the details, charges and timing with you directly.</p></li>
+      </ol>
+
+      <div class="notice mt-8">
+        <i data-lucide="info" class="mt-0.5 h-5 w-5 shrink-0 text-brand-700"></i>
+        <p>The online order form is not live yet. Delivery charges, areas covered and timelines are to be confirmed by {{siteName}}. Until then, contact us to request a delivery.</p>
+      </div>
+
+      <div class="mt-6">{{> contact-actions message="Hello%20Tim-Ferad%2C%20I%20would%20like%20to%20send%20a%20package." }}</div>
+    </section>
+  </main>
+  {{> footer }}
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>

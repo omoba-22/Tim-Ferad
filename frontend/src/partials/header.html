@@ -1,18 +1,22 @@
+<a href="#main" class="sr-only rounded bg-white px-4 py-2 focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50">Skip to content</a>
 <header class="border-b border-ash-200 bg-white">
-  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-    <a href="/" class="text-xl font-bold text-brand-700">[LOGO] Tim-Ferad</a>
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between px-4 py-3">
+    <a href="/" class="flex items-center gap-3">
+      <!-- Replace this box with the client's logo: <img src="/logo.png" alt="Tim-Ferad" class="h-10"> -->
+      <span class="flex h-10 w-10 items-center justify-center rounded bg-ash-100 text-xs font-bold text-ash-600">LOGO</span>
+      <span class="text-xl font-bold text-brand-700">{{siteName}}</span>
+    </a>
 
     <button data-menu-button type="button" aria-expanded="false" aria-controls="main-menu"
-      class="rounded-md border border-ash-200 px-3 py-2 text-sm md:hidden">
-      Menu
-    </button>
+      class="rounded-md border border-ash-200 px-3 py-2 text-sm md:hidden">Menu</button>
 
     <nav id="main-menu" data-menu aria-label="Main"
-      class="hidden w-full flex-col gap-1 pt-4 md:flex md:w-auto md:flex-row md:gap-6 md:pt-0">
-      <a class="py-2 text-ash-900 hover:text-brand-700" href="/travel.html">Travel</a>
-      <a class="py-2 text-ash-900 hover:text-brand-700" href="/delivery.html">Delivery</a>
-      <a class="py-2 text-ash-900 hover:text-brand-700" href="/about.html">About</a>
-      <a class="py-2 text-ash-900 hover:text-brand-700" href="/contact.html">Contact</a>
+      class="hidden w-full flex-col gap-1 pt-3 md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:pt-0">
+      <a class="py-2 hover:text-brand-700" href="/travel.html">Travel</a>
+      <a class="py-2 hover:text-brand-700" href="/delivery.html">Delivery</a>
+      <a class="py-2 hover:text-brand-700" href="/about.html">About</a>
+      <a class="py-2 hover:text-brand-700" href="/contact.html">Contact</a>
+      <a class="btn-primary !py-2" href="/travel.html">Book a trip</a>
     </nav>
   </div>
 </header>

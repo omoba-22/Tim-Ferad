@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>{{> head title="Contact us" description="Contact Tim-Ferad by phone, WhatsApp or email." }}</head>
+<body class="bg-ash-50 font-sans text-ash-900">
+  {{> header }}
+  <main id="main">
+    {{> page-banner title="Contact us" intro="Call, message us on WhatsApp, or send an email." }}
+    <section class="section">
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="card space-y-4">
+          <p class="flex items-start gap-3"><i data-lucide="phone" class="mt-1 h-5 w-5 text-brand-700"></i><a href="tel:{{phoneTel}}">{{phoneDisplay}}</a></p>
+          <p class="flex items-start gap-3"><i data-lucide="mail" class="mt-1 h-5 w-5 text-brand-700"></i><a href="mailto:{{email}}">{{email}}</a></p>
+          <p class="flex items-start gap-3"><i data-lucide="map-pin" class="mt-1 h-5 w-5 text-brand-700"></i><span>{{address}}</span></p>
+          <p class="flex items-start gap-3"><i data-lucide="clock" class="mt-1 h-5 w-5 text-brand-700"></i><span>{{hours}}</span></p>
+        </div>
+        <div class="card">
+          <h2 class="text-lg font-semibold">Message us</h2>
+          <p class="mb-4 mt-2 text-ash-600">You start the conversation yourself. Nothing is sent until you press send in WhatsApp.</p>
+          {{> contact-actions message="Hello%20Tim-Ferad%2C%20I%20have%20a%20question." }}
+        </div>
+      </div>
+    </section>
+  </main>
+  {{> footer }}
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>
