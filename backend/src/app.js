@@ -3,25 +3,27 @@ import helmet from 'helmet'
 import cors from 'cors'
 import { env } from './config/env.js'
 import { supabase } from './db/supabase.js'
+import { AppError } from './utils/errors.js'
 import { publicRouter } from './routes/public.js'
+import { bookingsRouter } from './routes/bookings.js'
 import { adminRouter } from './routes/admin.js'
 
 export const app = express()
 
 app.disable('x-powered-by')
+// Behind Render's proxy, so rate limits see the real visitor address
+if (env.NODE_ENV === 'production') app.set('trust proxy', 1)
 app.use(helmet())
 app.use(cors({ origin: env.FRONTEND_ORIGIN }))
 
-// NOTE: the Paystack webhook route (Stage 4) needs the raw request body,
+// NOTE: the Paystack webhook route (step 4.3) needs the raw request body,
 // so it will be mounted BEFORE this line.
 app.use(express.json({ limit: '100kb' }))
 
-// Is the server running?
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' })
 })
 
-// Can the server reach the database?
 app.get('/api/health/db', async (req, res, next) => {
   try {
     const { error } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1 })
@@ -33,14 +35,31 @@ app.get('/api/health/db', async (req, res, next) => {
 })
 
 app.use('/api', publicRouter)
+app.use('/api', bookingsRouter)
 app.use('/api/admin', adminRouter)
-// Unknown routes
+
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' })
 })
 
 // One place for errors. Details go to the server log, never to the visitor.
 app.use((err, req, res, next) => {
+  if (err instanceof AppError) {
+    return res.status(err.status).json({ error: err.message })
+  }
+  // Bad JSON, oversized body and similar client mistakes
+  if (err.status && err.status >= 400 && err.status < 500) {
+    return res.status(err.status).json({ error: 'Invalid request' })
+  }
   console.error('Unhandled error:', err.message)
   res.status(500).json({ error: 'Something went wrong' })
 })
+// Development-only: print one line per request (never the body or any token)
+if (env.NODE_ENV === 'development') {
+  app.use((req, res, next) => {
+    res.on('close', () => {
+      console.log(req.method, req.path, res.statusCode, res.writableFinished ? '' : '(connection closed early)')
+    })
+    next()
+  })
+}
