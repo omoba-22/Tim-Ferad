@@ -4,7 +4,8 @@ import { AppError } from '../utils/errors.js'
 import {
   newBookingReference, newPaystackReference, deriveAccessToken, hashToken, tokenMatches,
 } from '../utils/ids.js'
-import { initializeTransaction, verifyTransaction } from './paystack.js'
+import { initializeTransaction } from './paystack.js'
+import { reconcilePayment } from './payments.js'
 
 // Database error text -> safe message for the customer
 const RPC_ERRORS = {
@@ -127,36 +128,12 @@ export async function verifyBookingPayment(reference, token) {
     .eq('booking_id', booking.id).order('created_at', { ascending: false }).limit(1).single()
 
   if (payment.status === 'pending' || payment.status === 'failed') {
-    let tx
     try {
-      tx = await verifyTransaction(payment.paystack_reference)
+      await reconcilePayment(payment.paystack_reference)
     } catch (err) {
       console.error('Could not verify with Paystack:', err.message)
       throw new AppError(502, 'We could not check the payment right now. Please try again shortly.')
     }
-
-    if (tx.reference !== payment.paystack_reference) {
-      throw new AppError(502, 'We could not check the payment right now. Please try again shortly.')
-    }
-
-    if (tx.status === 'success') {
-      const { error } = await supabase.rpc('confirm_payment', {
-        p_paystack_reference: payment.paystack_reference,
-        p_amount_kobo: tx.amount,
-        p_currency: tx.currency,
-        p_transaction_id: String(tx.id),
-        p_paid_at: tx.paid_at ?? null,
-        // Only non-sensitive fields are stored
-        p_verify_response: {
-          status: tx.status, amount: tx.amount, currency: tx.currency,
-          channel: tx.channel, gateway_response: tx.gateway_response, paid_at: tx.paid_at,
-        },
-      })
-      if (error) throw error
-    } else if (tx.status === 'failed') {
-      await supabase.rpc('mark_payment_failed', { p_paystack_reference: payment.paystack_reference })
-    }
-    // Any other status (abandoned, ongoing, pending) means: not paid yet.
   }
 
   return currentState(booking.id)

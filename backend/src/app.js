@@ -7,6 +7,7 @@ import { AppError } from './utils/errors.js'
 import { publicRouter } from './routes/public.js'
 import { bookingsRouter } from './routes/bookings.js'
 import { adminRouter } from './routes/admin.js'
+import { webhooksRouter } from './routes/webhooks.js'
 
 export const app = express()
 
@@ -16,6 +17,7 @@ if (env.NODE_ENV === 'production') app.set('trust proxy', 1)
 app.use(helmet())
 app.use(cors({ origin: env.FRONTEND_ORIGIN }))
 
+app.use('/api', webhooksRouter)
 // NOTE: the Paystack webhook route (step 4.3) needs the raw request body,
 // so it will be mounted BEFORE this line.
 app.use(express.json({ limit: '100kb' }))
