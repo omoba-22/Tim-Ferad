@@ -8,6 +8,7 @@ import { publicRouter } from './routes/public.js'
 import { bookingsRouter } from './routes/bookings.js'
 import { adminRouter } from './routes/admin.js'
 import { webhooksRouter } from './routes/webhooks.js'
+import { internalRouter } from './routes/internal.js'
 
 export const app = express()
 
@@ -39,6 +40,7 @@ app.get('/api/health/db', async (req, res, next) => {
 app.use('/api', publicRouter)
 app.use('/api', bookingsRouter)
 app.use('/api/admin', adminRouter)
+app.use('/api/internal', internalRouter)
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' })

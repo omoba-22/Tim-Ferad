@@ -15,7 +15,7 @@ async function call(path, options = {}) {
       signal: AbortSignal.timeout(15000),
     })
   } catch (err) {
-    throw new Error(`Paystack request failed: ${err.name}`)
+    throw new Error(`Paystack request failed: ${err.name} ${err.cause?.code ?? ''}`.trim())
   }
 
   const body = await res.json().catch(() => null)
