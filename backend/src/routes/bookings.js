@@ -10,7 +10,7 @@ export const bookingsRouter = Router()
 // extra data such as a price or a payment status.
 const createSchema = z.object({
   tripId: z.string().uuid(),
-  passengers: z.array(z.object({ fullName: z.string().trim().min(1).max(100) }).strict())
+  passengers: z.array(z.object({ fullName: z.string().trim().min(1).max(100).transform((s) => s.normalize('NFC')) }).strict())
     .min(1).max(MAX_PASSENGERS_PER_BOOKING),
   email: z.string().trim().toLowerCase().email().max(254),
   phone: z.string().trim().regex(/^\+?[0-9 ()-]{7,20}$/),
