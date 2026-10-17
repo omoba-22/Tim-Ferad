@@ -8,6 +8,8 @@ const p = (path) => fileURLToPath(new URL(path, import.meta.url))
 
 export default defineConfig({
   root: 'src',
+  // The .env file lives in frontend/, not in frontend/src/
+  envDir: p('./'),
   publicDir: '../public',
   build: {
     outDir: '../dist',
@@ -17,6 +19,9 @@ export default defineConfig({
       input: {
         index: p('./src/index.html'),
         travel: p('./src/travel.html'),
+        book: p('./src/book.html'),
+        paymentResult: p('./src/payment-result.html'),
+        ticket: p('./src/ticket.html'),
         delivery: p('./src/delivery.html'),
         about: p('./src/about.html'),
         contact: p('./src/contact.html'),

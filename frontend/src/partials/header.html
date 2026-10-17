@@ -1,6 +1,6 @@
 <a href="#main" class="sr-only rounded bg-white px-4 py-2 focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50">Skip to content</a>
-<header class="border-b border-ash-200 bg-white">
-  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between px-4 py-3">
+<header class="relative border-b border-ash-200 bg-white print:hidden">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
     <a href="/" class="flex items-center gap-3">
       <!-- Replace this box with the client's logo: <img src="/logo.png" alt="Tim-Ferad" class="h-10"> -->
       <span class="flex h-10 w-10 items-center justify-center rounded bg-ash-100 text-xs font-bold text-ash-600">LOGO</span>
@@ -8,15 +8,21 @@
     </a>
 
     <button data-menu-button type="button" aria-expanded="false" aria-controls="main-menu"
-      class="rounded-md border border-ash-200 px-3 py-2 text-sm md:hidden">Menu</button>
+      class="inline-flex items-center gap-2 rounded-md border border-ash-200 px-3 py-2 text-sm font-semibold md:hidden">
+      <span data-menu-open><i data-lucide="menu" class="h-5 w-5"></i></span>
+      <span data-menu-close class="hidden"><i data-lucide="x" class="h-5 w-5"></i></span>
+      Menu
+    </button>
 
     <nav id="main-menu" data-menu aria-label="Main"
-      class="hidden w-full flex-col gap-1 pt-3 md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:pt-0">
-      <a class="py-2 hover:text-brand-700" href="/travel.html">Travel</a>
-      <a class="py-2 hover:text-brand-700" href="/delivery.html">Delivery</a>
-      <a class="py-2 hover:text-brand-700" href="/about.html">About</a>
-      <a class="py-2 hover:text-brand-700" href="/contact.html">Contact</a>
-      <a class="btn-primary !py-2" href="/travel.html">Book a trip</a>
+      class="absolute inset-x-0 top-full z-40 hidden border-b border-ash-200 bg-white px-4 pb-4 shadow-md md:static md:flex md:items-center md:border-0 md:bg-transparent md:p-0 md:shadow-none">
+      <ul class="divide-y divide-ash-100 md:flex md:items-center md:gap-2 md:divide-y-0">
+        <li><a data-nav-link class="nav-link" href="/travel.html">Travel</a></li>
+        <li><a data-nav-link class="nav-link" href="/delivery.html">Delivery</a></li>
+        <li><a data-nav-link class="nav-link" href="/about.html">About</a></li>
+        <li><a data-nav-link class="nav-link" href="/contact.html">Contact</a></li>
+        <li class="pt-4 md:pl-2 md:pt-0"><a class="btn-primary w-full md:w-auto md:!py-2" href="/travel.html">Book a trip</a></li>
+      </ul>
     </nav>
   </div>
 </header>

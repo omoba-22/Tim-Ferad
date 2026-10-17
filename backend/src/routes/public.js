@@ -48,3 +48,42 @@ publicRouter.get('/trips', async (req, res, next) => {
     next(err)
   }
 })
+const tripIdSchema = z.string().uuid()
+
+// One bookable trip, for the booking page
+publicRouter.get('/trips/:id', async (req, res, next) => {
+  try {
+    const id = tripIdSchema.safeParse(req.params.id)
+    if (!id.success) return res.status(404).json({ error: 'Trip not found.' })
+
+    const { data: trip, error } = await supabase
+      .from('trips')
+      .select('id, departure_at, fare_kobo, currency, departure_point, capacity, status, routes ( origin_city, destination_city, default_departure_point )')
+      .eq('id', id.data)
+      .maybeSingle()
+    if (error) throw error
+
+    // Only published trips that have not left yet are visible
+    if (!trip || trip.status !== 'published' || new Date(trip.departure_at) <= new Date()) {
+      return res.status(404).json({ error: 'Trip not found.' })
+    }
+
+    const { data: held, error: heldError } = await supabase.rpc('trip_held_places', { p_trip_id: trip.id })
+    if (heldError) throw heldError
+
+    res.json({
+      trip: {
+        id: trip.id,
+        from: trip.routes.origin_city,
+        to: trip.routes.destination_city,
+        departureAt: trip.departure_at,
+        fareKobo: trip.fare_kobo,
+        currency: trip.currency,
+        departurePoint: trip.departure_point ?? trip.routes.default_departure_point,
+        remainingPlaces: Math.max(trip.capacity - held, 0),
+      },
+    })
+  } catch (err) {
+    next(err)
+  }
+})

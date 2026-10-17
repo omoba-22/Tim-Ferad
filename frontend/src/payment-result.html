@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>{{> head title="Payment result" description="Checking your payment." noindex=true }}</head>
+<body class="bg-ash-50 font-sans text-ash-900">
+  {{> header }}
+  <main id="main">
+    {{> page-banner title="Payment" intro="We are confirming your payment with Paystack." }}
+    <section class="section max-w-2xl">
+      <div id="result" class="card" role="status" aria-live="polite" aria-busy="true">
+        <p>Checking your payment...</p>
+      </div>
+      <div id="contact-block" hidden class="mt-6">
+        <h2 class="text-lg font-semibold">Need help?</h2>
+        <div class="mt-3">{{> contact-actions message="Hello%20Tim-Ferad%2C%20I%20need%20help%20with%20my%20booking." }}</div>
+      </div>
+    </section>
+  </main>
+  {{> footer }}
+  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/pages/payment-result.js"></script>
+</body>
+</html>

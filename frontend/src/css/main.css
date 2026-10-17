@@ -24,7 +24,7 @@
 
 /* Reusable pieces so pages stay short */
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 font-semibold transition-colors;
+  @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60;
 }
 @utility btn-primary {
   @apply btn bg-brand-700 text-white hover:bg-brand-900;
@@ -43,4 +43,17 @@
 }
 @utility notice {
   @apply flex gap-3 rounded-md border border-ash-200 bg-brand-50 p-4 text-sm text-ash-900;
+}
+@utility field {
+  @apply mt-1 w-full rounded-md border border-ash-600 bg-white px-3 py-2;
+}
+@utility nav-link {
+  @apply block border-l-4 border-transparent px-3 py-3 font-medium text-ash-900 hover:bg-brand-50 hover:text-brand-700 md:rounded-none md:border-l-0 md:border-b-2 md:py-2;
+  &[aria-current="page"] {
+    @apply border-brand-700 bg-brand-50 font-bold text-brand-700 md:bg-transparent;
+  }
+}
+/* Reserve space for icons until JavaScript draws them (avoids a small jump) */
+i[data-lucide] {
+  display: inline-block;
 }

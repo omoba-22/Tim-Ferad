@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>{{> head title="Book your trip" description="Enter passenger details and pay securely." noindex=true }}</head>
+<body class="bg-ash-50 font-sans text-ash-900">
+  {{> header }}
+  <main id="main">
+    {{> page-banner title="Book your trip" intro="Enter your details, then pay securely with Paystack." }}
+    <section class="section max-w-3xl">
+      <div id="status" class="card" role="status">Loading trip details...</div>
+
+      <form id="booking-form" hidden class="space-y-6">
+        <div class="card">
+          <h2 class="text-lg font-bold">Your trip</h2>
+          <dl id="trip-summary" class="mt-2 divide-y divide-ash-100"></dl>
+        </div>
+
+        <div class="card space-y-4">
+          <h2 class="text-lg font-bold">Passengers</h2>
+          <div>
+            <label for="count" class="block text-sm font-semibold">Number of passengers</label>
+            <select id="count" name="count" class="field"></select>
+          </div>
+          <div id="passenger-fields" class="space-y-4"></div>
+        </div>
+
+        <div class="card space-y-4">
+          <h2 class="text-lg font-bold">Contact details</h2>
+          <p class="text-sm text-ash-600">We use these to send your ticket and to contact you about your trip.</p>
+          <div>
+            <label for="email" class="block text-sm font-semibold">Email address</label>
+            <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" class="field" />
+          </div>
+          <div>
+            <label for="phone" class="block text-sm font-semibold">Phone number</label>
+            <input id="phone" name="phone" type="tel" required maxlength="20" autocomplete="tel"
+              pattern="[+0-9 \(\)\-]{7,20}" title="Digits only, for example 08012345678 or +2348012345678" class="field" />
+          </div>
+        </div>
+
+        <div class="card space-y-4">
+          <div class="flex items-center justify-between gap-4">
+            <span class="font-semibold">Total</span>
+            <strong id="total" class="text-2xl text-brand-700"></strong>
+          </div>
+          <p class="text-sm text-ash-600">The final amount is confirmed by our server when you pay. Your places are held for a short time while you complete payment.</p>
+          <p id="form-error" role="alert" hidden class="rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-800"></p>
+          <button id="submit" type="submit" class="btn-primary w-full sm:w-auto">Continue to payment</button>
+        </div>
+      </form>
+    </section>
+  </main>
+  {{> footer }}
+  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/pages/book.js"></script>
+</body>
+</html>
