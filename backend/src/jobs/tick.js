@@ -1,5 +1,6 @@
 import { supabase } from '../db/supabase.js'
 import { reconcilePayment } from '../services/payments.js'
+import { processOutbox } from '../services/outbox.js'
 
 const MINUTE = 60 * 1000
 
@@ -47,5 +48,13 @@ export async function runTick() {
   const { data: expired, error: expireError } = await supabase.rpc('expire_stale_bookings')
   if (expireError) throw expireError
 
-  return { checked, errors, expired }
+    // 3. Send queued emails and retry failed ones that are due
+  let outbox = { sent: 0, retrying: 0, failed: 0 }
+  try {
+    outbox = await processOutbox()
+  } catch (err) {
+    console.error('Tick: outbox failed:', err.message)
+  }
+
+  return { checked, errors, expired, outbox }
 }

@@ -1,5 +1,6 @@
 import { supabase } from '../db/supabase.js'
 import { verifyTransaction } from './paystack.js'
+import { processOutbox } from './outbox.js'
 
 // Asks PAYSTACK what happened to a payment, then lets the database act on
 // the answer. Used by both the verify page and the webhook, so there is one
@@ -23,7 +24,12 @@ export async function reconcilePayment(paystackReference) {
         channel: tx.channel, gateway_response: tx.gateway_response, paid_at: tx.paid_at,
       },
     })
-    if (error) throw error
+        if (error) throw error
+
+    // Send any queued emails now, without making the customer wait.
+    // If this fails, the notification stays queued and tick retries it.
+    processOutbox().catch((err) => console.error('Outbox after payment failed:', err.message))
+
     return data
   }
 
