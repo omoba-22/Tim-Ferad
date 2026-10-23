@@ -35,3 +35,12 @@ export function tokenMatches(token, storedHash) {
   const b = Buffer.from(storedHash, 'hex')
   return a.length === b.length && timingSafeEqual(a, b)
 }
+export function newDeliveryReference() {
+  const chars = [...randomBytes(10)].map((b) => ALPHABET[b % ALPHABET.length])
+  return `DL-${chars.join('')}`
+}
+
+// Different prefix from bookings, so a booking token can never open a delivery order
+export function deriveDeliveryToken(reference, secret) {
+  return createHmac('sha256', secret).update(`delivery:${reference}`).digest('base64url')
+}

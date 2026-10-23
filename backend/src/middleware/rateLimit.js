@@ -11,3 +11,4 @@ const make = (limit, windowMinutes) =>
 
 export const createBookingLimiter = make(10, 15)
 export const checkBookingLimiter = make(60, 15)
+export const createDeliveryLimiter = make(10, 15)

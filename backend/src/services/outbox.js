@@ -1,7 +1,10 @@
 import { supabase } from '../db/supabase.js'
 import { getTicket } from './tickets.js'
+import { getDeliveryOrderById } from './deliveryOrders.js'
 import { sendEmail } from './email.js'
-import { ticketEmail, companyBookingEmail } from './emailTemplates.js'
+import {
+  ticketEmail, companyBookingEmail, deliveryCustomerEmail, deliveryCompanyEmail,
+} from './emailTemplates.js'
 import { deriveAccessToken } from '../utils/ids.js'
 import { env } from '../config/env.js'
 import { AppError } from '../utils/errors.js'
@@ -13,11 +16,7 @@ const BACKOFF_MS = [5 * MINUTE, 15 * MINUTE, 60 * MINUTE, 3 * 60 * MINUTE]
 // While one worker is sending, hide the row from other workers for this long
 const CLAIM_MS = 5 * MINUTE
 
-// Builds the email for one notification, using current data from the database.
-async function buildEmail(n) {
-  if (n.type !== 'ticket' && n.type !== 'booking_company') {
-    throw new AppError(400, `No email template for type "${n.type}"`)
-  }
+async function buildBookingEmail(n) {
   if (!n.booking_id) throw new AppError(400, 'Notification has no booking')
 
   const { data: booking, error } = await supabase
@@ -31,6 +30,20 @@ async function buildEmail(n) {
   const token = deriveAccessToken(booking.reference, env.ACCESS_TOKEN_SECRET)
   const ticket = await getTicket(booking.reference, token)
   return n.type === 'ticket' ? ticketEmail(ticket) : companyBookingEmail(ticket)
+}
+
+async function buildDeliveryEmail(n) {
+  if (!n.delivery_order_id) throw new AppError(400, 'Notification has no delivery order')
+  const order = await getDeliveryOrderById(n.delivery_order_id)
+  if (!order) throw new AppError(404, 'Delivery order no longer exists')
+  return n.type === 'delivery_customer' ? deliveryCustomerEmail(order) : deliveryCompanyEmail(order)
+}
+
+// Builds the email for one notification, using current data from the database.
+async function buildEmail(n) {
+  if (n.type === 'ticket' || n.type === 'booking_company') return buildBookingEmail(n)
+  if (n.type === 'delivery_customer' || n.type === 'delivery_company') return buildDeliveryEmail(n)
+  throw new AppError(400, `No email template for type "${n.type}"`)
 }
 
 async function markSent(n) {

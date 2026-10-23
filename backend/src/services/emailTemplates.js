@@ -1,5 +1,5 @@
 import { env } from '../config/env.js'
-import { deriveAccessToken } from '../utils/ids.js'
+import { deriveAccessToken, deriveDeliveryToken } from '../utils/ids.js'
 
 function escapeHtml(value) {
   return String(value)
@@ -77,4 +77,66 @@ export function companyBookingEmail(t) {
     `<div style="font-family:Arial,sans-serif;font-size:16px;color:#222">` +
     `<h1 style="font-size:20px">New paid booking</h1>${htmlTable(rows)}</div>`
   return { subject: `New paid booking ${t.reference}`, text, html }
+}
+export function deliveryLink(reference) {
+  const token = deriveDeliveryToken(reference, env.ACCESS_TOKEN_SECRET)
+  const origin = env.FRONTEND_ORIGIN.replace(/\/+$/, '')
+  // [PLACEHOLDER] This page is built in step 5.3
+  return `${origin}/delivery-confirmation.html?ref=${encodeURIComponent(reference)}&t=${encodeURIComponent(token)}`
+}
+
+function deliveryRows(o) {
+  const rows = [
+    ['Order reference', o.reference],
+    ['Sender', `${o.sender_name} (${o.sender_phone})`],
+    ['Recipient', `${o.recipient_name} (${o.recipient_phone})`],
+    ['Pickup address', o.pickup_address],
+    ['Delivery address', o.delivery_address],
+    ['Package', o.package_description],
+  ]
+  if (o.instructions) rows.push(['Instructions', o.instructions])
+  return rows
+}
+
+// Email to the customer
+export function deliveryCustomerEmail(o) {
+  const link = deliveryLink(o.reference)
+  const rows = deliveryRows(o)
+
+  const text = [
+    'We have received your delivery order. It is now waiting for review by our team.',
+    '',
+    ...rows.map(([label, value]) => `${label}: ${value}`),
+    '',
+    `View or download your order summary: ${link}`,
+    '',
+    'Please quote your order reference when you contact us.',
+    'Anyone with this link can see your order, so please do not share it publicly.',
+  ].join('\n')
+
+  const html =
+    `<div style="font-family:Arial,sans-serif;font-size:16px;color:#222;max-width:560px">` +
+    `<h1 style="font-size:20px;color:#166534">Delivery order received</h1>` +
+    `<p>We have received your delivery order. It is now waiting for review by our team.</p>` +
+    htmlTable(rows) +
+    `<p style="margin:24px 0"><a href="${escapeHtml(link)}" ` +
+    `style="background:#166534;color:#fff;padding:12px 20px;text-decoration:none;border-radius:6px">` +
+    `View order summary</a></p>` +
+    `<p style="font-size:14px;color:#555">If the button does not work, copy this link into your browser:<br>` +
+    `${escapeHtml(link)}</p>` +
+    `<p style="font-size:14px;color:#555">Please quote your order reference when you contact us. ` +
+    `Anyone with this link can see your order, so please do not share it publicly.</p>` +
+    `</div>`
+
+  return { subject: `Your Tim-Ferad delivery order ${o.reference}`, text, html }
+}
+
+// Email to the company
+export function deliveryCompanyEmail(o) {
+  const rows = [...deliveryRows(o), ['Sender email', o.sender_email]]
+  const text = ['A new delivery order needs review.', '', ...rows.map(([l, v]) => `${l}: ${v}`)].join('\n')
+  const html =
+    `<div style="font-family:Arial,sans-serif;font-size:16px;color:#222">` +
+    `<h1 style="font-size:20px">New delivery order</h1>${htmlTable(rows)}</div>`
+  return { subject: `New delivery order ${o.reference}`, text, html }
 }
