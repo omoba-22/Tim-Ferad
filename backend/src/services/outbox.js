@@ -83,7 +83,10 @@ export async function processOutbox({ limit = 20 } = {}) {
     .from('notifications')
     .select('*')
     .eq('status', 'queued')
-    .lte('next_attempt_at', new Date().toISOString())
+        // 10 seconds of grace, so a small clock difference between this server
+    // and the database never leaves a new email waiting. Retry delays are
+    // minutes long, so this cannot cause an early retry.
+    .lte('next_attempt_at', new Date(Date.now() + 10_000).toISOString())
     .order('next_attempt_at')
     .limit(limit)
   if (error) throw error

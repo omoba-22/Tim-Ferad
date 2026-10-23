@@ -15,13 +15,73 @@
 
       <div class="notice mt-8">
         <i data-lucide="info" class="mt-0.5 h-5 w-5 shrink-0 text-brand-700"></i>
-        <p>The online order form is not live yet. Delivery charges, areas covered and timelines are to be confirmed by {{siteName}}. Until then, contact us to request a delivery.</p>
+        <p>Submitting this form does not confirm a delivery and you pay nothing online. Delivery charges, areas covered and timelines are to be confirmed by {{siteName}}.</p>
       </div>
 
-      <div class="mt-6">{{> contact-actions message="Hello%20Tim-Ferad%2C%20I%20would%20like%20to%20send%20a%20package." }}</div>
+      <h2 id="order-heading" class="mt-12 text-2xl font-bold">Request a delivery</h2>
+      <form id="delivery-form" class="card mt-6 space-y-8" novalidate aria-labelledby="order-heading">
+        <fieldset class="space-y-4">
+          <legend class="text-lg font-bold">Sender</legend>
+          <div>
+            <label for="senderName" class="block text-sm font-semibold">Full name</label>
+            <input id="senderName" name="senderName" type="text" required maxlength="100" autocomplete="name" class="field">
+          </div>
+          <div>
+            <label for="senderPhone" class="block text-sm font-semibold">Phone number</label>
+            <input id="senderPhone" name="senderPhone" type="tel" inputmode="tel" required maxlength="20" autocomplete="tel" class="field">
+          </div>
+          <div>
+            <label for="senderEmail" class="block text-sm font-semibold">Email address</label>
+            <input id="senderEmail" name="senderEmail" type="email" required maxlength="254" autocomplete="email" aria-describedby="senderEmail-hint" class="field">
+            <p id="senderEmail-hint" class="mt-1 text-sm text-ash-600">We email your order summary and a PDF copy to this address, so please use one you can open.</p>
+          </div>
+          <div>
+            <label for="pickupAddress" class="block text-sm font-semibold">Pickup address</label>
+            <textarea id="pickupAddress" name="pickupAddress" required maxlength="300" rows="2" class="field"></textarea>
+          </div>
+        </fieldset>
+
+        <fieldset class="space-y-4">
+          <legend class="text-lg font-bold">Recipient</legend>
+          <div>
+            <label for="recipientName" class="block text-sm font-semibold">Full name</label>
+            <input id="recipientName" name="recipientName" type="text" required maxlength="100" autocomplete="off" class="field">
+          </div>
+          <div>
+            <label for="recipientPhone" class="block text-sm font-semibold">Phone number</label>
+            <input id="recipientPhone" name="recipientPhone" type="tel" inputmode="tel" required maxlength="20" autocomplete="off" class="field">
+          </div>
+          <div>
+            <label for="deliveryAddress" class="block text-sm font-semibold">Delivery address</label>
+            <textarea id="deliveryAddress" name="deliveryAddress" required maxlength="300" rows="2" class="field"></textarea>
+          </div>
+        </fieldset>
+
+        <fieldset class="space-y-4">
+          <legend class="text-lg font-bold">Package</legend>
+          <div>
+            <label for="packageDescription" class="block text-sm font-semibold">What are you sending?</label>
+            <textarea id="packageDescription" name="packageDescription" required maxlength="1000" rows="3" class="field"></textarea>
+          </div>
+          <div>
+            <label for="instructions" class="block text-sm font-semibold">Special instructions (optional)</label>
+            <textarea id="instructions" name="instructions" maxlength="500" rows="2" class="field"></textarea>
+          </div>
+        </fieldset>
+
+        <div id="form-error" class="notice" role="alert" hidden></div>
+
+        <button id="submit" type="submit" class="btn-primary">Submit delivery request</button>
+      </form>
+
+      <div class="mt-10">
+        <p class="mb-3 font-semibold">Prefer to talk to us first?</p>
+        {{> contact-actions message="Hello%20Tim-Ferad%2C%20I%20would%20like%20to%20send%20a%20package." }}
+      </div>
     </section>
   </main>
   {{> footer }}
   <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/pages/delivery.js"></script>
 </body>
 </html>

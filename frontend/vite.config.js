@@ -23,6 +23,7 @@ export default defineConfig({
         paymentResult: p('./src/payment-result.html'),
         ticket: p('./src/ticket.html'),
         delivery: p('./src/delivery.html'),
+        deliveryConfirmation: p('./src/delivery-confirmation.html'),
         about: p('./src/about.html'),
         contact: p('./src/contact.html'),
         faqs: p('./src/faqs.html'),

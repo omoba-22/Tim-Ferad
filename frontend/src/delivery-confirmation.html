@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>{{> head title="Delivery request received" description="Your delivery order summary." noindex=true }}</head>
+<body class="bg-ash-50 font-sans text-ash-900">
+  {{> header }}
+  <main id="main">
+    {{> page-banner title="Delivery request" intro="Keep your order reference for any questions." }}
+    <section class="section max-w-2xl">
+      <div id="order" aria-live="polite"><p>Loading your order...</p></div>
+      <div id="contact" class="mt-8 print:hidden" hidden>
+        <p class="mb-3 font-semibold">Questions about your order?</p>
+        {{> contact-actions message="Hello%20Tim-Ferad%2C%20I%20have%20a%20question%20about%20my%20delivery%20order." }}
+        <p id="contact-reference" class="mt-3 text-sm text-ash-600"></p>
+      </div>
+    </section>
+  </main>
+  {{> footer }}
+  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/pages/delivery-confirmation.js"></script>
+</body>
+</html>
