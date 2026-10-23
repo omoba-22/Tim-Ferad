@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>{{> head title="Staff dashboard" description="Staff area." noindex=true }}</head>
+<body class="bg-ash-50 font-sans text-ash-900">
+  <header class="border-b border-ash-200 bg-white">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+      <p class="text-xl font-bold text-brand-700">{{siteName}} staff</p>
+      <div class="flex items-center gap-4">
+        <p id="staff-name" class="hidden text-sm text-ash-600 sm:block"></p>
+        <button id="sign-out" type="button" class="btn-outline">
+          <i data-lucide="log-out" class="h-5 w-5"></i> Sign out
+        </button>
+      </div>
+    </div>
+  </header>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-8">
+    <div id="content" aria-live="polite"><p>Checking your sign-in...</p></div>
+  </main>
+  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/admin/dashboard.js"></script>
+</body>
+</html>

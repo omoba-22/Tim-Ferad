@@ -9,6 +9,7 @@ const schema = z
     FRONTEND_ORIGIN: z.string().url(),
     SUPABASE_URL: z.string().url(),
     SUPABASE_SECRET_KEY: z.string().min(20),
+    SUPABASE_PUBLISHABLE_KEY: z.string().min(20),
     PAYSTACK_SECRET_KEY: z.string().startsWith('sk_'),
     ACCESS_TOKEN_SECRET: z.string().min(32),
     CRON_SECRET: z.string().min(32),

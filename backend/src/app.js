@@ -11,6 +11,7 @@ import { webhooksRouter } from './routes/webhooks.js'
 import { internalRouter } from './routes/internal.js'
 import { ticketsRouter } from './routes/tickets.js'
 import { deliveryRouter } from './routes/delivery.js'
+import { adminAuthRouter } from './routes/adminAuth.js'
 
 export const app = express()
 
@@ -42,6 +43,7 @@ app.get('/api/health/db', async (req, res, next) => {
 app.use('/api', publicRouter)
 app.use('/api', bookingsRouter)
 app.use('/api', deliveryRouter)
+app.use('/api/admin', adminAuthRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/internal', internalRouter)
 app.use('/api', ticketsRouter)
