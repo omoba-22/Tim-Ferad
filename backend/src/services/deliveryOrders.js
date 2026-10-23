@@ -1,6 +1,8 @@
 import { supabase } from '../db/supabase.js'
 import { env } from '../config/env.js'
-import { newDeliveryReference, deriveDeliveryToken, hashToken } from '../utils/ids.js'
+import { AppError } from '../utils/errors.js'
+import { newDeliveryReference, deriveDeliveryToken, hashToken, tokenMatches } from '../utils/ids.js'
+import { formatLagosDate, formatLagosTime } from '../utils/format.js'
 
 export async function createDeliveryOrder(input) {
   const newReference = newDeliveryReference()
@@ -41,4 +43,46 @@ export async function getDeliveryOrderById(id) {
     .maybeSingle()
   if (error) throw error
   return data
+}
+// [PLACEHOLDER] Wording until the company confirms its delivery workflow
+const STATUS_LABELS = {
+  pending_review: 'Waiting for review',
+  confirmed: 'Confirmed',
+  picked_up: 'Picked up',
+  in_transit: 'In transit',
+  delivered: 'Delivered',
+  cancelled: 'Cancelled',
+}
+
+// Returns an order only when the caller holds its private token.
+export async function getDeliveryOrder(reference, token) {
+  const { data: o, error } = await supabase
+    .from('delivery_orders')
+    .select(`
+      reference, status, sender_name, sender_phone, recipient_name, recipient_phone,
+      pickup_address, delivery_address, package_description, instructions,
+      access_token_hash, created_at
+    `)
+    .eq('reference', reference)
+    .maybeSingle()
+  if (error) throw error
+
+  // Same answer for "no such order" and "wrong token"
+  if (!o || !token || !tokenMatches(token, o.access_token_hash)) {
+    throw new AppError(404, 'Delivery order not found.')
+  }
+
+  return {
+    reference: o.reference,
+    status: STATUS_LABELS[o.status] ?? o.status,
+    submittedOn: `${formatLagosDate(o.created_at)}, ${formatLagosTime(o.created_at)}`,
+    senderName: o.sender_name,
+    senderPhone: o.sender_phone,
+    recipientName: o.recipient_name,
+    recipientPhone: o.recipient_phone,
+    pickupAddress: o.pickup_address,
+    deliveryAddress: o.delivery_address,
+    packageDescription: o.package_description,
+    instructions: o.instructions,
+  }
 }
