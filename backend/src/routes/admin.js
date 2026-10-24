@@ -3,8 +3,7 @@ import { z } from 'zod'
 import { requireStaff } from '../middleware/auth.js'
 import { listTrips, getTripOptions, createTrip, cancelTrip } from '../services/adminTrips.js'
 import { listBookings } from '../services/adminBookings.js'
-import { listDeliveryOrders, updateDeliveryStatus } from '../services/adminDelivery.js'
-
+import { listDeliveryOrders, updateDeliveryStatus, countPendingDeliveryOrders } from '../services/adminDelivery.js'
 export const adminRouter = Router()
 
 // Everything in this file requires a staff login.
@@ -108,6 +107,14 @@ adminRouter.post('/delivery-orders/:id/status', async (req, res, next) => {
     if (!body.success) return res.status(400).json({ error: 'Choose a valid status.' })
     await updateDeliveryStatus(req.staff.id, id.data, body.data.status)
     res.json({ ok: true })
+  } catch (err) {
+    next(err)
+  }
+})
+adminRouter.get('/summary', async (req, res, next) => {
+  try {
+    res.set('Cache-Control', 'no-store')
+    res.json({ pendingDeliveryOrders: await countPendingDeliveryOrders() })
   } catch (err) {
     next(err)
   }

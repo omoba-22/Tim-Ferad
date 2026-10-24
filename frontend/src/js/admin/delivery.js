@@ -135,6 +135,8 @@ async function init() {
   try {
     const staff = await startPage()
     if (!staff) return
+        const wanted = new URLSearchParams(location.search).get('status')
+    if (wanted && STATUSES.includes(wanted)) form.elements.status.value = wanted
     await run()
   } catch (err) {
     if (sessionEnded(err)) return

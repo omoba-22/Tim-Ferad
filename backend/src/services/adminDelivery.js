@@ -67,3 +67,11 @@ export async function updateDeliveryStatus(staffId, orderId, status) {
     throw known ? new AppError(known[0], known[1]) : error
   }
 }
+export async function countPendingDeliveryOrders() {
+  const { count, error } = await supabase
+    .from('delivery_orders')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'pending_review')
+  if (error) throw error
+  return count ?? 0
+}
