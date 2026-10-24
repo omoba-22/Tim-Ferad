@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { requireStaff } from '../middleware/auth.js'
 import { listTrips, getTripOptions, createTrip, cancelTrip } from '../services/adminTrips.js'
 import { listBookings } from '../services/adminBookings.js'
+import { listDeliveryOrders, updateDeliveryStatus } from '../services/adminDelivery.js'
 
 export const adminRouter = Router()
 
@@ -75,6 +76,38 @@ adminRouter.get('/bookings', async (req, res, next) => {
     if (!parsed.success) return res.status(400).json({ error: 'Please check the search and try again.' })
     res.set('Cache-Control', 'no-store')
     res.json({ bookings: await listBookings(parsed.data) })
+  } catch (err) {
+    next(err)
+  }
+})
+const DELIVERY_STATUSES = ['pending_review', 'confirmed', 'picked_up', 'in_transit', 'delivered', 'cancelled']
+
+const deliveryQuery = z.object({
+  q: z.string().trim().max(60).optional(),
+  status: z.enum(DELIVERY_STATUSES).optional(),
+})
+
+adminRouter.get('/delivery-orders', async (req, res, next) => {
+  try {
+    const parsed = deliveryQuery.safeParse(req.query)
+    if (!parsed.success) return res.status(400).json({ error: 'Please check the search and try again.' })
+    res.set('Cache-Control', 'no-store')
+    res.json({ orders: await listDeliveryOrders(parsed.data) })
+  } catch (err) {
+    next(err)
+  }
+})
+
+const statusBody = z.object({ status: z.enum(DELIVERY_STATUSES) }).strict()
+
+adminRouter.post('/delivery-orders/:id/status', async (req, res, next) => {
+  try {
+    const id = z.string().uuid().safeParse(req.params.id)
+    if (!id.success) return res.status(404).json({ error: 'Delivery order not found.' })
+    const body = statusBody.safeParse(req.body)
+    if (!body.success) return res.status(400).json({ error: 'Choose a valid status.' })
+    await updateDeliveryStatus(req.staff.id, id.data, body.data.status)
+    res.json({ ok: true })
   } catch (err) {
     next(err)
   }
