@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>{{> head title="Trips" description="Staff area." noindex=true }}</head>
+<body class="bg-ash-50 font-sans text-ash-900">
+  {{> admin-header }}
+  <main id="main" class="mx-auto max-w-6xl px-4 py-8">
+    <h1 class="text-2xl font-bold">Trips</h1>
+
+    <details class="card mt-6">
+      <summary class="cursor-pointer font-semibold">Add a trip</summary>
+      <form id="trip-form" class="mt-4 grid gap-4 sm:grid-cols-2" novalidate>
+        <div>
+          <label for="routeId" class="block text-sm font-semibold">Route</label>
+          <select id="routeId" name="routeId" required class="field"></select>
+        </div>
+        <div>
+          <label for="vehicleId" class="block text-sm font-semibold">Vehicle</label>
+          <select id="vehicleId" name="vehicleId" required class="field"></select>
+        </div>
+        <div>
+          <label for="date" class="block text-sm font-semibold">Departure date</label>
+          <input id="date" name="date" type="date" required class="field">
+        </div>
+        <div>
+          <label for="time" class="block text-sm font-semibold">Departure time (Lagos time)</label>
+          <input id="time" name="time" type="time" required class="field">
+        </div>
+        <div>
+          <label for="fareNaira" class="block text-sm font-semibold">Fare per passenger (naira)</label>
+          <input id="fareNaira" name="fareNaira" type="text" inputmode="decimal" required maxlength="10" autocomplete="off" class="field">
+        </div>
+        <div>
+          <label for="departurePoint" class="block text-sm font-semibold">Departure point (optional)</label>
+          <input id="departurePoint" name="departurePoint" type="text" maxlength="200" autocomplete="off" aria-describedby="route-hint" class="field">
+          <p id="route-hint" class="mt-1 text-sm text-ash-600"></p>
+        </div>
+        <div class="sm:col-span-2">
+          <p id="form-error" class="notice" role="alert" hidden></p>
+          <p id="form-ok" class="notice" role="status" hidden></p>
+        </div>
+        <div class="sm:col-span-2">
+          <button id="submit" type="submit" class="btn-primary">Add trip</button>
+        </div>
+      </form>
+    </details>
+
+    <p id="list-error" class="notice mt-6" role="alert" hidden></p>
+    <div id="trips" class="mt-6" aria-live="polite"><p>Loading trips...</p></div>
+  </main>
+  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/admin/trips.js"></script>
+</body>
+</html>

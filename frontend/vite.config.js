@@ -32,6 +32,7 @@ export default defineConfig({
         notFound: p('./src/404.html'),
         adminLogin: p('./src/admin/login.html'),
         adminHome: p('./src/admin/index.html'),
+        adminTrips: p('./src/admin/trips.html'),
       },
     },
   },
