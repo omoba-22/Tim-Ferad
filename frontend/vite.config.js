@@ -33,6 +33,7 @@ export default defineConfig({
         adminLogin: p('./src/admin/login.html'),
         adminHome: p('./src/admin/index.html'),
         adminTrips: p('./src/admin/trips.html'),
+        adminBookings: p('./src/admin/bookings.html'),
       },
     },
   },

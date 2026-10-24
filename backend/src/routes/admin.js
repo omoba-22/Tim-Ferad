@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { z } from 'zod'
 import { requireStaff } from '../middleware/auth.js'
 import { listTrips, getTripOptions, createTrip, cancelTrip } from '../services/adminTrips.js'
+import { listBookings } from '../services/adminBookings.js'
 
 export const adminRouter = Router()
 
@@ -58,6 +59,22 @@ adminRouter.post('/trips/:id/cancel', async (req, res, next) => {
     if (!id.success) return res.status(404).json({ error: 'Trip not found.' })
     await cancelTrip(req.staff.id, id.data)
     res.json({ ok: true })
+  } catch (err) {
+    next(err)
+  }
+})
+
+const bookingsQuery = z.object({
+  q: z.string().trim().max(60).optional(),
+  status: z.enum(['pending_payment', 'confirmed', 'expired']).optional(),
+})
+
+adminRouter.get('/bookings', async (req, res, next) => {
+  try {
+    const parsed = bookingsQuery.safeParse(req.query)
+    if (!parsed.success) return res.status(400).json({ error: 'Please check the search and try again.' })
+    res.set('Cache-Control', 'no-store')
+    res.json({ bookings: await listBookings(parsed.data) })
   } catch (err) {
     next(err)
   }
